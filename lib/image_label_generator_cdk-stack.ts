@@ -1,16 +1,30 @@
-import * as cdk from 'aws-cdk-lib';
+import { Stack, StackProps, CfnOutput, RemovalPolicy } from 'aws-cdk-lib';
+import { Bucket } from 'aws-cdk-lib/aws-s3';
+import { Role, ServicePrincipal, ManagedPolicy } from 'aws-cdk-lib/aws-iam';
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
 
-export class ImageLabelGeneratorCdkStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+
+export class ImageLabelGeneratorStack extends Stack {
+  constructor(scope: Construct, id: string, prefix: String, props?: StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    // Bucket to store images
+    const bucket = new Bucket(this, `${prefix}-ImageBucket`, {
+      removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true
+    });
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'ImageLabelGeneratorCdkQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    // Rekognition service role
+    const rekognitionRole = new Role(this, `${prefix}-RekognitionServiceRole`, {
+      assumedBy: new ServicePrincipal('rekognition.amazonaws.com'),
+      managedPolicies: [ManagedPolicy.fromAwsManagedPolicyName('AmazonRekognitionFullAccess')]
+    });
+
+    bucket.grantRead(rekognitionRole);
+
+    // Output the bucket name
+    new CfnOutput(this, 'BucketName', {
+      value: bucket.bucketName
+    });
   }
 }
