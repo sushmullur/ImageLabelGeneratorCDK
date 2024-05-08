@@ -12,7 +12,7 @@ export class ImageLabelGeneratorStack extends Stack {
     super(scope, id, props);
 
     // Bucket to store images
-    const inputBucket = new Bucket(this, `${prefix}-ImageBucket`, {
+    const inputBucket = new Bucket(this, `${prefix}-InputBucket`, {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true
     });
@@ -28,9 +28,9 @@ export class ImageLabelGeneratorStack extends Stack {
 
     // Lambda function to process images
     const imageProcessor = new Function(this, `${prefix}-ImageProcessor`, {
-      runtime: Runtime.PYTHON_3_9,
+      runtime: Runtime.PYTHON_3_11,
       code: Code.fromAsset(PATH_TO_LAMBDA),
-      handler: 'index.handler',
+      handler: 'index.lambda_handler',
       environment: {
         OUTPUT_BUCKET: outputBucket.bucketName
       }
