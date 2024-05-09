@@ -5,7 +5,7 @@ import { Function, Runtime, Code } from 'aws-cdk-lib/aws-lambda';
 import { S3EventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { Construct } from 'constructs';
 
-const PATH_TO_LAMBDA = '../ImageLabelGeneratorLambda/ImageProcessor.zip';
+const PATH_TO_LAMBDA = '../ImageLabelGeneratorLambda/build/ImageProcessor.zip';
 
 export class ImageLabelGeneratorStack extends Stack {
   constructor(scope: Construct, id: string, prefix: string, props?: StackProps) {
@@ -28,7 +28,7 @@ export class ImageLabelGeneratorStack extends Stack {
 
     // Lambda function to process images
     const imageProcessor = new Function(this, `${prefix}-ImageProcessor`, {
-      runtime: Runtime.PYTHON_3_11,
+      runtime: Runtime.PYTHON_3_8,
       code: Code.fromAsset(PATH_TO_LAMBDA),
       handler: 'index.lambda_handler',
       environment: {

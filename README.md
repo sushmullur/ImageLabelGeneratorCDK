@@ -1,8 +1,8 @@
-# Welcome to your CDK TypeScript project
+# Project Description
 
-This is a blank project for CDK development with TypeScript.
+CDK for a little computer vision project that generates labels for images in an S3 bucket for now. Plans to expand further to include more computer vision tasks.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+The actual lambda function can be found in another repo within the account called `ImageLabelGeneratorLambda`. https://github.com/sushmullur/ImageLabelGeneratorLambda
 
 ## Useful commands
 
