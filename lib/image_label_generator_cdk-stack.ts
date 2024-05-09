@@ -1,4 +1,4 @@
-import { Stack, StackProps, CfnOutput, RemovalPolicy } from 'aws-cdk-lib';
+import { Duration, Stack, StackProps, CfnOutput, RemovalPolicy } from 'aws-cdk-lib';
 import { Bucket, EventType } from 'aws-cdk-lib/aws-s3';
 import { Role, ServicePrincipal, ManagedPolicy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Function, Runtime, Code } from 'aws-cdk-lib/aws-lambda';
@@ -33,7 +33,8 @@ export class ImageLabelGeneratorStack extends Stack {
       handler: 'index.lambda_handler',
       environment: {
         OUTPUT_BUCKET: outputBucket.bucketName
-      }
+      },
+      timeout: Duration.seconds(30)
     });
 
     // Grant permissions to Lambda function
