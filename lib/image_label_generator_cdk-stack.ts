@@ -34,7 +34,8 @@ export class ImageLabelGeneratorStack extends Stack {
       environment: {
         OUTPUT_BUCKET: outputBucket.bucketName
       },
-      timeout: Duration.seconds(30)
+      timeout: Duration.seconds(30),
+      memorySize: 500
     });
 
     // Grant permissions to Lambda function
