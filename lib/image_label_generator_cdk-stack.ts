@@ -30,12 +30,12 @@ export class ImageLabelGeneratorStack extends Stack {
     const imageProcessor = new Function(this, `${prefix}-ImageProcessor`, {
       runtime: Runtime.PYTHON_3_8,
       code: Code.fromAsset(PATH_TO_LAMBDA),
-      handler: 'index.lambda_handler',
+      handler: 'lambda_function.lambda_handler',
       environment: {
         OUTPUT_BUCKET: outputBucket.bucketName
       },
       timeout: Duration.seconds(30),
-      memorySize: 500
+      memorySize: 300
     });
 
     // Grant permissions to Lambda function
@@ -47,7 +47,7 @@ export class ImageLabelGeneratorStack extends Stack {
     }));
 
     // S3 event source for Lambda function
-    const fileTypes = ['.jpg', '.jpeg', '.png'];
+    const fileTypes = ['.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG'];
     fileTypes.forEach(suffix => {
       imageProcessor.addEventSource(new S3EventSource(inputBucket, {
         events: [EventType.OBJECT_CREATED_PUT],
